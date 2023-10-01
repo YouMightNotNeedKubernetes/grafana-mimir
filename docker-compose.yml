@@ -1,0 +1,65 @@
+x-deploy-policy: &x-deploy-policy
+  update_config:
+    parallelism: 1
+    delay: 30s
+    order: stop-first
+    failure_action: rollback
+  rollback_config:
+    parallelism: 1
+    delay: 30s
+  restart_policy:
+    condition: on-failure
+    delay: 30s
+    max_attempts: 3
+    window: 120s
+
+x-default-logging: &x-default-logging
+  options:
+    max-size: "12m"
+    max-file: "5"
+  driver: json-file
+
+configs:
+  mimir.yaml:
+    name: mimir-v1.0.yaml
+    file: configs/mimir.yaml
+
+services:
+  mimir:
+    image: grafana/mimir:latest
+    environment:
+      - CONSUL_HTTP_ADDR=${CONSUL_HTTP_ADDR:-consul:8500}
+      - CONSUL_ACL_TOKEN=${CONSUL_ACL_TOKEN:-}
+      - S3_ENDPOINT_URL=${S3_ENDPOINT_URL:-http://minio:9000}
+      - S3_REGION=${S3_REGION:-us-east-1}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME:-mimir}
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
+    command: 
+      - -config.expand-env=true
+      - -config.file=/etc/mimir/mimir.yaml
+    networks:
+      - docker_metrics
+    ports:
+      - 3200:3200 # http
+      # - 9097:9097 # grpc
+    volumes:
+      - mimir:/mimir
+    configs:
+      - source: mimir.yaml
+        target: /etc/mimir/mimir.yaml
+    deploy: 
+      <<: *x-deploy-policy
+      replicas: 3
+      labels:
+        io.prometheus.job: "mimir"
+    logging: *x-default-logging
+
+volumes:
+  mimir:
+    name: mimir-{{.Task.Slot}}
+
+networks:
+  docker_metrics:
+    name: docker_metrics
+    external: true

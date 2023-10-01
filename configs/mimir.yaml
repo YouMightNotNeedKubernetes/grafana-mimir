@@ -1,0 +1,139 @@
+target: all,alertmanager
+
+server:
+  http_listen_port: 3200
+  grpc_listen_port: 9097
+  log_level: debug
+  # Configure the server to allow messages up to 100MB.
+  grpc_server_max_recv_msg_size: 1048576000
+  grpc_server_max_send_msg_size: 1048576000
+  grpc_server_max_concurrent_streams: 10000
+
+common:
+  storage:
+    backend: s3
+    s3:
+      endpoint: ${S3_ENDPOINT_URL:-minio:9000}
+      region: ${S3_REGION:us-east-1}
+      bucket_name: mimir
+      access_key_id: ${S3_ACCESS_KEY_ID}
+      secret_access_key: ${S3_SECRET_ACCESS_KEY}
+      insecure: ${S3_INSECURE:true}
+
+# Blocks storage requires a prefix when using a common object storage bucket.
+blocks_storage:
+  s3:
+    bucket_name: mimir-blocks
+
+ruler_storage:
+  s3:
+    bucket_name: mimir-ruler
+
+alertmanager_storage:
+  s3:
+    bucket_name: mimir-alertmanager
+
+compactor:
+  sharding_ring:
+    instance_interface_names: &instance_interface_names
+      - eth0
+      - en0
+      - lo
+    kvstore: &default-ring-kvstore
+      prefix: mimir/collectors/
+      store: consul
+      consul:
+        host: ${CONSUL_HTTP_ADDR:-consul:8500}
+        acl_token: ${CONSUL_ACL_TOKEN}
+
+distributor:
+  pool:
+    health_check_ingesters: true
+  ha_tracker: # ha deduplication
+    enable_ha_tracker: true
+    kvstore: 
+      <<: *default-ring-kvstore
+      prefix: mimir/ha-tracker/
+  ring:
+    instance_interface_names: *instance_interface_names
+    kvstore: *default-ring-kvstore
+
+ingester:
+  ring:
+    instance_interface_names: *instance_interface_names
+    kvstore: *default-ring-kvstore
+    replication_factor: 3
+
+query_scheduler:
+  ring:
+    instance_interface_names: *instance_interface_names
+    kvstore: *default-ring-kvstore
+
+ruler:
+  ring:
+    instance_interface_names: *instance_interface_names
+    kvstore: 
+      <<: *default-ring-kvstore
+      prefix: mimir/rulers/
+
+store_gateway:
+  sharding_ring:
+    instance_interface_names: *instance_interface_names
+    kvstore: *default-ring-kvstore
+    replication_factor: 3
+
+overrides_exporter:
+  ring:
+    instance_interface_names: *instance_interface_names
+    kvstore: *default-ring-kvstore
+
+alertmanager:
+  # data_dir: /data/alertmanager
+  # fallback_config_file: /etc/alertmanager-fallback-config.yaml
+  external_url: http://alertmanager:9093/alertmanager
+
+  sharding_ring:
+    instance_interface_names: *instance_interface_names
+    kvstore: *default-ring-kvstore
+    replication_factor: 3
+
+ingester_client:
+  grpc_client_config:
+    # Configure the client to allow messages up to 100MB.
+    max_recv_msg_size: 1048576000
+    max_send_msg_size: 1048576000
+    grpc_compression: snappy
+
+limits:
+  # ha deduplication
+  accept_ha_samples: true
+
+  # Enable TSDB block upload
+  compactor_block_upload_enabled: true
+
+  ingestion_rate: 100000
+  ingestion_burst_size: 2000000
+  max_label_name_length: 2048
+  max_label_value_length: 4096
+  max_label_names_per_series: 50
+  max_global_series_per_user: 4500000
+
+  # See https://grafana.com/docs/mimir/latest/configure/configure-metrics-storage-retention/
+  # Delete from storage metrics data older than 3 months.
+  compactor_blocks_retention_period: 1y
+  # 
+  # Or delete from specific tenant storage metrics data
+  # tenant1:
+  #   compactor_blocks_retention_period: 1y
+
+
+# Disable the anonymous usage statistics reporting
+# 
+# If possible, we ask you to keep the usage reporting feature enabled and help us 
+# understand more about how the open source community runs Mimir. 
+# 
+# In case you want to opt-out from anonymous usage statistics reporting,
+# set the CLI flag -usage-stats.enabled=false or 
+# change the following YAML configuration:
+usage_stats:
+  enabled: false
