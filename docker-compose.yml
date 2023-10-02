@@ -39,7 +39,7 @@ services:
       - -config.expand-env=true
       - -config.file=/etc/mimir/mimir.yaml
     networks:
-      - docker_metrics
+      - dockerswarm_monitoring
     ports:
       - 3200:3200 # http
       # - 9097:9097 # grpc
@@ -60,6 +60,6 @@ volumes:
     name: mimir-{{.Task.Slot}}
 
 networks:
-  docker_metrics:
-    name: docker_metrics
+  dockerswarm_monitoring:
+    name: dockerswarm_monitoring
     external: true
