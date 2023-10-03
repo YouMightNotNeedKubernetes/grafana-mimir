@@ -13,12 +13,12 @@ common:
   storage:
     backend: s3
     s3:
-      endpoint: ${S3_ENDPOINT_URL:-minio:9000}
-      region: ${S3_REGION:us-east-1}
+      endpoint: minio:9000
+      region: us-east-1
       bucket_name: mimir
-      access_key_id: ${S3_ACCESS_KEY_ID}
-      secret_access_key: ${S3_SECRET_ACCESS_KEY}
-      insecure: ${S3_INSECURE:true}
+      access_key_id: access_key_id
+      secret_access_key: secret_access_key
+      insecure: true
 
 # Blocks storage requires a prefix when using a common object storage bucket.
 blocks_storage:
