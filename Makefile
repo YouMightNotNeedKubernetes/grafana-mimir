@@ -1,8 +1,5 @@
 docker_stack_name = mimir
 
--include .env.example
--include .env.local
-
 it:
 	@echo "make [deploy|destroy]"
 
