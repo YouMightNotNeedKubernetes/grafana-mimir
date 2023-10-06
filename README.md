@@ -30,6 +30,23 @@ alertmanager:
 
 And add any additional configuration you need to `configs/mimir.yaml`.
 
+### Object Storage buckets
+
+You need to create the following buckets in your object storage:
+- `mimir`
+- `mimir-blocks`
+- `mimir-ruler`
+- `mimir-alertmanager`
+
+You can change the bucket names in the `configs/mimir.yaml` file. Look for the `bucket_name` property.
+
+**Example**
+```yaml
+blocks_storage:
+  s3:
+    bucket_name: mimir-blocks # Change this to your bucket name
+```
+
 ## Deployment
 
 To deploy the stack, run the following command:
