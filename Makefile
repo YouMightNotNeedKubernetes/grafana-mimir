@@ -5,7 +5,7 @@ it:
 
 .PHONY: configs
 configs:
-	test -f "configs/mimir.yaml" || cp configs/mimir.base.yaml configs/mimir.yaml
+	test -f "configs/mimir.yaml" || cp configs/mimir.default.yaml configs/mimir.yaml
 
 deploy: configs
 	docker stack deploy -c docker-compose.yml $(docker_stack_name)
