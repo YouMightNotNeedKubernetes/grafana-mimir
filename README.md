@@ -1,4 +1,4 @@
-# mimir
+# Grafana Mimir
 A high-availability Grafana Mimir deployment for Docker Swarm
 
 ## Getting Started
