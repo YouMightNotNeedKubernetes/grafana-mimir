@@ -27,7 +27,9 @@ configs:
 services:
   mimir:
     image: grafana/mimir:latest
-    command: -config.file=/etc/mimir/mimir.yaml
+    command: 
+      - -config.expand-env=true
+      - -config.file=/etc/mimir/mimir.yaml
     networks:
       - dockerswarm_monitoring
     ports:
