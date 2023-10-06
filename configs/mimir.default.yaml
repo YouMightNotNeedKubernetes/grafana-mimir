@@ -12,6 +12,9 @@ server:
 common:
   storage:
     backend: s3
+
+    # !!! IMPORTANT !!!
+    # ! Update this to the IP address of your Minio server or S3 endpoint
     s3:
       endpoint: minio:9000
       region: us-east-1
@@ -43,8 +46,22 @@ compactor:
       prefix: mimir/collectors/
       store: consul
       consul:
-        host: ${CONSUL_HTTP_ADDR:-consul:8500}
-        acl_token: ${CONSUL_ACL_TOKEN}
+        # !!! IMPORTANT !!!
+        # ! Update this to the IP address of your Consul server
+        host: consul:8500
+        acl_token: secret
+
+# You can also change the to a different alertmanager instance here.
+# Its default value is http://alertmanager:9093 which is the default in cluster deployment.
+alertmanager:
+  # data_dir: /data/alertmanager
+  # fallback_config_file: /etc/alertmanager-fallback-config.yaml
+  external_url: http://alertmanager:9093/alertmanager
+
+  sharding_ring:
+    instance_interface_names: *instance_interface_names
+    kvstore: *default-ring-kvstore
+    replication_factor: 3
 
 distributor:
   pool:
@@ -86,16 +103,6 @@ overrides_exporter:
   ring:
     instance_interface_names: *instance_interface_names
     kvstore: *default-ring-kvstore
-
-alertmanager:
-  # data_dir: /data/alertmanager
-  # fallback_config_file: /etc/alertmanager-fallback-config.yaml
-  external_url: http://alertmanager:9093/alertmanager
-
-  sharding_ring:
-    instance_interface_names: *instance_interface_names
-    kvstore: *default-ring-kvstore
-    replication_factor: 3
 
 ingester_client:
   grpc_client_config:
