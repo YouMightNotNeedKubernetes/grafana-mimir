@@ -1,4 +1,13 @@
-x-deploy-policy: &x-deploy-policy
+x-deploy: &x-deploy-default
+  replicas: 3
+  placement:
+    max_replicas_per_node: 1
+    constraints:
+      - node.labels.mimir == true
+    preferences:
+      - spread: node.labels.mimir
+  labels:
+    io.prometheus.job: "mimir"
   update_config:
     parallelism: 1
     delay: 30s
@@ -13,7 +22,7 @@ x-deploy-policy: &x-deploy-policy
     max_attempts: 3
     window: 120s
 
-x-default-logging: &x-default-logging
+x-logging: &x-logging-default
   options:
     max-size: "12m"
     max-file: "5"
@@ -40,12 +49,8 @@ services:
     configs:
       - source: mimir.yaml
         target: /etc/mimir/mimir.yaml
-    deploy: 
-      <<: *x-deploy-policy
-      replicas: 3
-      labels:
-        io.prometheus.job: "mimir"
-    logging: *x-default-logging
+    deploy: *x-deploy-default
+    logging: *x-logging-default
 
 volumes:
   mimir:
