@@ -49,7 +49,7 @@ services:
 
 volumes:
   mimir:
-    name: mimir-{{.Task.Slot}}
+    external: true
 
 networks:
   dockerswarm_monitoring:
