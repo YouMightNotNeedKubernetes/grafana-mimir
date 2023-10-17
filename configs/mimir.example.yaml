@@ -16,11 +16,11 @@ common:
     # !!! IMPORTANT !!!
     # ! Update this to the IP address of your Minio server or S3 endpoint
     s3:
-      endpoint: host.docker.internal:9000
+      endpoint: minio:9000
       region: us-east-1
       bucket_name: mimir
-      access_key_id: minioadmin
-      secret_access_key: minioadmin
+      access_key_id: access_key_id
+      secret_access_key: secret_access_key
       insecure: true
 
 # Blocks storage requires a prefix when using a common object storage bucket.
@@ -48,8 +48,8 @@ compactor:
       consul:
         # !!! IMPORTANT !!!
         # ! Update this to the IP address of your Consul server
-        host: host.docker.internal:8500
-        # acl_token: secret
+        host: consul:8500
+        acl_token: secret
 
 # You can also change the to a different alertmanager instance here.
 # Its default value is http://alertmanager:9093 which is the default in cluster deployment.
