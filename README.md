@@ -6,7 +6,7 @@ A high-availability Grafana Mimir deployment for Docker Swarm
 You might need to create swarm-scoped overlay network called `dockerswarm_monitoring` for all the stacks to communicate if you haven't already.
 
 ```sh
-$ docker network create --driver overlay --attachable dockerswarm_monitoring
+$ docker network create --scope=swarm --driver overlay --attachable dockerswarm_monitoring
 ```
 
 We provided a base configuration file for Grafana Mimir. You can find it in the `config` folder.  
