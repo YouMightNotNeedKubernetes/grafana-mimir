@@ -1,4 +1,4 @@
-target: all,alertmanager
+target: all,ruler,alertmanager
 
 server:
   http_listen_port: 3200
@@ -54,7 +54,7 @@ compactor:
 # You can also change the to a different alertmanager instance here.
 # Its default value is http://alertmanager:9093 which is the default in cluster deployment.
 alertmanager:
-  # external_url: http://{{.Node.Hostname}}:9093/alertmanager
+  external_url: http://{{.Node.Hostname}}:9093/alertmanager
   fallback_config_file: /etc/mimir/alertmanager-fallback-config.yaml
 
   sharding_ring:
