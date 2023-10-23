@@ -33,7 +33,8 @@ configs:
     template_driver: golang
     name: mimir-v1.0.yaml
     file: configs/mimir.yaml
-
+  alertmanager-fallback-config.yaml:
+    file: configs/alertmanager-fallback-config.yaml
 services:
   mimir:
     image: grafana/mimir:latest
@@ -50,6 +51,8 @@ services:
     configs:
       - source: mimir.yaml
         target: /etc/mimir/mimir.yaml
+      - source: alertmanager-fallback-config.yaml
+        target: /etc/mimir/alertmanager-fallback-config.yaml
     deploy: *x-deploy-default
     logging: *x-logging-default
 
