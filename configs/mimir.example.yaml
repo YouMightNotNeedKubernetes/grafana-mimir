@@ -1,4 +1,4 @@
-target: all,alertmanager
+target: all,ruler,alertmanager
 
 server:
   http_listen_port: 3200
@@ -54,9 +54,8 @@ compactor:
 # You can also change the to a different alertmanager instance here.
 # Its default value is http://alertmanager:9093 which is the default in cluster deployment.
 alertmanager:
-  # data_dir: /data/alertmanager
-  # fallback_config_file: /etc/alertmanager-fallback-config.yaml
-  external_url: http://alertmanager:9093/alertmanager
+  external_url: http://{{.Node.Hostname}}:9093/alertmanager
+  fallback_config_file: /etc/mimir/alertmanager-fallback-config.yaml
 
   sharding_ring:
     instance_interface_names: *instance_interface_names
@@ -87,6 +86,7 @@ query_scheduler:
     kvstore: *default-ring-kvstore
 
 ruler:
+  alertmanager_url: http://127.0.0.1:9097/alertmanager
   ring:
     instance_interface_names: *instance_interface_names
     kvstore: 
