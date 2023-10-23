@@ -30,6 +30,7 @@ x-logging: &x-logging-default
 
 configs:
   mimir.yaml:
+    template_driver: golang
     name: mimir-v1.0.yaml
     file: configs/mimir.yaml
 
