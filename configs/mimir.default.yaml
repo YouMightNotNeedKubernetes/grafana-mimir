@@ -1,4 +1,4 @@
-target: all,ruler,alertmanager
+target: all,ruler,alertmanager,overrides-exporter
 
 server:
   http_listen_port: 3200
