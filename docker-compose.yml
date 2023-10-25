@@ -26,13 +26,22 @@ x-logging: &x-logging-default
     max-file: "5"
   driver: json-file
 
+volumes:
+  mimir:
+    external: true
+
+networks:
+  dockerswarm_monitoring:
+    name: dockerswarm_monitoring
+    external: true
+
 configs:
   mimir.yaml:
     template_driver: golang
-    name: mimir-v1.0.yaml
     file: configs/mimir.yaml
   alertmanager-fallback-config.yaml:
     file: configs/alertmanager-fallback-config.yaml
+
 services:
   mimir:
     image: grafana/mimir:latest
@@ -53,12 +62,3 @@ services:
         target: /etc/mimir/alertmanager-fallback-config.yaml
     deploy: *x-deploy-default
     logging: *x-logging-default
-
-volumes:
-  mimir:
-    external: true
-
-networks:
-  dockerswarm_monitoring:
-    name: dockerswarm_monitoring
-    external: true
