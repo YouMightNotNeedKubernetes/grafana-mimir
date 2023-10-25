@@ -26,13 +26,13 @@ x-logging: &x-logging-default
     max-file: "5"
   driver: json-file
 
-volumes:
-  mimir:
-    external: true
-
 networks:
   dockerswarm_monitoring:
     name: dockerswarm_monitoring
+    external: true
+
+volumes:
+  mimir:
     external: true
 
 configs:
