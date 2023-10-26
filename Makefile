@@ -19,7 +19,7 @@ destroy:
 	docker stack rm $(docker_stack_name)
 
 
-MIMIR_DASHBOARD_DIR=https://github.com/grafana/mimir/blob/main/operations/mimir-mixin-compiled
+MIMIR_DASHBOARD_DIR=https://raw.githubusercontent.com/grafana/mimir/main/operations/mimir-mixin-compiled
 define get_dashboard
 	curl -L -o dashboards/$(1) $(MIMIR_DASHBOARD_DIR)/dashboards/$(1)
 endef
