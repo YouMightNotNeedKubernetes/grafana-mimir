@@ -32,6 +32,9 @@ networks:
   dockerswarm_monitoring:
     name: dockerswarm_monitoring
     external: true
+  prometheus:
+    name: prometheus
+    external: true
 
 volumes:
   mimir:
@@ -52,6 +55,7 @@ services:
       - -config.file=/etc/mimir/mimir.yaml
     networks:
       - dockerswarm_monitoring
+      - prometheus
     ports:
       - ${GRAFANA_MIMIR_PORT:-3200}:3200 # http
       # - 9097:9097 # grpc
