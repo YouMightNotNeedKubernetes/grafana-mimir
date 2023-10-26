@@ -1,2 +1,3 @@
 configs/mimir.yaml
 docker-compose.*.yml
+dashboards/
