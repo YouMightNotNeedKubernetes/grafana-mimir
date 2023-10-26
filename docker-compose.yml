@@ -6,6 +6,8 @@ x-deploy: &x-deploy-default
       - node.labels.mimir == true
     preferences:
       - spread: node.labels.mimir
+  labels:
+    io.prometheus.enable: "true"
   update_config:
     parallelism: 1
     delay: 30s
