@@ -51,11 +51,14 @@ services:
     command: 
       - -config.expand-env=true
       - -config.file=/etc/mimir/mimir.yaml
+    environment:
+      GRAFANA_MIMIR_HTTP_LISTEN_PORT: ${GRAFANA_MIMIR_HTTP_LISTEN_PORT:-3200}
+      GRAFANA_MIMIR_GRPC_LISTEN_PORT: ${GRAFANA_MIMIR_GRPC_LISTEN_PORT:-9097}
     networks:
       - dockerswarm_monitoring
     ports:
-      - ${GRAFANA_MIMIR_PORT:-3200}:3200 # http
-      # - 9097:9097 # grpc
+      - ${GRAFANA_MIMIR_HTTP_LISTEN_PORT:-3200}:3200 # http_listen_port
+      - ${GRAFANA_MIMIR_GRPC_LISTEN_PORT:-9097}:9097 # grpc_listen_port
     volumes:
       - mimir:/mimir
     configs:

@@ -1,8 +1,8 @@
 target: all,ruler,alertmanager,overrides-exporter
 
 server:
-  http_listen_port: 3200
-  grpc_listen_port: 9097
+  http_listen_port: ${GRAFANA_MIMIR_HTTP_LISTEN_PORT}
+  grpc_listen_port: ${GRAFANA_MIMIR_GRPC_LISTEN_PORT}
   log_level: info
   # Configure the server to allow messages up to 100MB.
   grpc_server_max_recv_msg_size: 1048576000
