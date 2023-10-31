@@ -47,6 +47,7 @@ configs:
 services:
   mimir:
     image: grafana/mimir:${GRAFANA_MIMIR_VERSION:-latest}
+    hostname: mimir-{{.Task.Slot}}
     command: 
       - -config.expand-env=true
       - -config.file=/etc/mimir/mimir.yaml
