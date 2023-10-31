@@ -1,4 +1,4 @@
-docker_stack_name = mimir
+docker_stack_name = grafana-mimir
 
 compose_files := -c docker-compose.yml
 ifneq ("$(wildcard docker-compose.override.yml)","")
