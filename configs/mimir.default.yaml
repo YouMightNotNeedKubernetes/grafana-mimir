@@ -38,10 +38,7 @@ alertmanager_storage:
 
 compactor:
   sharding_ring:
-    instance_interface_names: &instance_interface_names
-      - eth0
-      - en0
-      - lo
+    instance_addr: &instance_addr mimir-{{.Task.Slot}}
     kvstore: &default-ring-kvstore
       prefix: mimir/collectors/
       store: consul
@@ -58,7 +55,7 @@ alertmanager:
   fallback_config_file: /etc/mimir/alertmanager-fallback-config.yaml
 
   sharding_ring:
-    instance_interface_names: *instance_interface_names
+    instance_addr: *instance_addr
     kvstore: *default-ring-kvstore
     replication_factor: 3
 
@@ -71,37 +68,37 @@ distributor:
       <<: *default-ring-kvstore
       prefix: mimir/ha-tracker/
   ring:
-    instance_interface_names: *instance_interface_names
+    instance_addr: *instance_addr
     kvstore: *default-ring-kvstore
 
 ingester:
   ring:
-    instance_interface_names: *instance_interface_names
+    instance_addr: *instance_addr
     kvstore: *default-ring-kvstore
     replication_factor: 3
 
 query_scheduler:
   ring:
-    instance_interface_names: *instance_interface_names
+    instance_addr: *instance_addr
     kvstore: *default-ring-kvstore
 
 ruler:
   alertmanager_url: http://127.0.0.1:9097/alertmanager
   ring:
-    instance_interface_names: *instance_interface_names
+    instance_addr: *instance_addr
     kvstore: 
       <<: *default-ring-kvstore
       prefix: mimir/rulers/
 
 store_gateway:
   sharding_ring:
-    instance_interface_names: *instance_interface_names
+    instance_addr: *instance_addr
     kvstore: *default-ring-kvstore
     replication_factor: 3
 
 overrides_exporter:
   ring:
-    instance_interface_names: *instance_interface_names
+    instance_addr: *instance_addr
     kvstore: *default-ring-kvstore
 
 ingester_client:
