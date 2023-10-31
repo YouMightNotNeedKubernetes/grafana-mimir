@@ -3,9 +3,9 @@ x-deploy: &x-deploy-default
   placement:
     max_replicas_per_node: 1
     constraints:
-      - node.labels.mimir == true
+      - node.labels.grafana-mimir == true
     preferences:
-      - spread: node.labels.mimir
+      - spread: node.labels.grafana-mimir
   labels:
     io.prometheus.enable: "true"
   update_config:
