@@ -8,6 +8,7 @@ x-deploy: &x-deploy-default
       - spread: node.labels.grafana-mimir
   labels:
     io.prometheus.enable: "true"
+    io.prometheus.scrape_port: "3200"
   update_config:
     parallelism: 1
     delay: 30s
