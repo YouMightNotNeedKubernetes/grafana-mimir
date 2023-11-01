@@ -63,5 +63,7 @@ services:
         target: /etc/mimir/mimir.yaml
       - source: alertmanager-fallback-config.yaml
         target: /etc/mimir/alertmanager-fallback-config.yaml
+    extra_hosts:
+      - host.docker.internal:host-gateway
     deploy: *x-deploy-default
     logging: *x-logging-default
