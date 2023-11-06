@@ -36,7 +36,6 @@ networks:
 
 volumes:
   mimir:
-    external: true
 
 configs:
   mimir.yaml:
@@ -56,7 +55,6 @@ services:
       - dockerswarm_monitoring
     ports:
       - ${GRAFANA_MIMIR_HTTP_LISTEN_PORT:-3200}:3200 # http_listen_port
-      - ${GRAFANA_MIMIR_GRPC_LISTEN_PORT:-9097}:9097 # grpc_listen_port
     volumes:
       - mimir:/mimir
     configs:
