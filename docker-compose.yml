@@ -54,7 +54,7 @@ services:
     networks:
       - dockerswarm_monitoring
     ports:
-      - ${GRAFANA_MIMIR_HTTP_LISTEN_PORT:-3200}:3200 # http_listen_port
+      - ${GRAFANA_MIMIR_HTTP_LISTEN_PORT:-3200}:3100 # http_listen_port
     volumes:
       - mimir:/mimir
     configs:
