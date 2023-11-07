@@ -2,7 +2,7 @@ target: all,ruler,alertmanager,overrides-exporter
 
 server:
   http_listen_port: 3100
-  grpc_listen_port: 9097
+  grpc_listen_port: 9095
   log_level: info
   # Configure the server to allow messages up to 100MB.
   grpc_server_max_recv_msg_size: 1048576000
